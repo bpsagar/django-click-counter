@@ -2,7 +2,6 @@ from .models import ClickCounter
 from django.conf import settings
 from django.db.models import F
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
 
 import json
 
@@ -17,12 +16,11 @@ CLICK_COUNTER_SETTINGS = getattr(
     settings, 'CLICK_COUNTER_SETTINGS', DEFAULT_COUNTER_SETTINGS)
 
 
-@csrf_exempt
 def increment_counter(request):
-    identifier = request.GET.get('identifier')
+    identifier = request.POST.get('identifier')
     if not identifier:
         return HttpResponse(json.dumps({'status': 'ERROR'}))
-    type = request.GET.get('type', 'DEFAULT')
+    type = request.POST.get('type', 'DEFAULT')
     counter, created = ClickCounter.objects.get_or_create(
         identifier=identifier, type=type)
     max_clicks = CLICK_COUNTER_SETTINGS.get(counter.type).get(
