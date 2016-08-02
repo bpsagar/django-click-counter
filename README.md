@@ -25,14 +25,27 @@ urlpatterns = [
 Loading template tags: `{% load clickcounter_extras %}`
 
 1. `indentifier_for_instance`: A template tag to get an identifier for an instance. It is generated using the model name, app label and model's primary key.
-   ```
-   {% identifier_for_instance instance=blog %}
-   ```
+
+  ```
+  {% identifier_for_instance instance=blog %}
+  ```
 2. `counter_for_identifier`: A template tag to get the counter value for an identifier.
-   ```
-   {% counter_for_identifier identifier='blog-0' %}
-   ```
+
+  ```
+  {% counter_for_identifier identifier='blog-0' %}
+  ```
 3. `counter_for_instance`: A template tag to get the counter value for an instance. This template tag makes use of the above tags to generate an identifier for the instance and then gets the counter for that identifier.
-   ```
-   {% counter_for_instance instance=blog %}
-   ```
+
+  ```
+  {% counter_for_instance instance=blog %}
+  ```
+4. `session_counter_for_identifier`: A template tag to get a counter from that session for an identifier. Requires `request` object to be in context.
+
+  ```
+  {% session_counter_for_identifier identifier='blog-0' %}
+  ```
+5. `session_counter_for_instance`: A template tag to get a counter from that session for an instance. Requires `request` object to be in context.
+
+  ```
+  {% session_counter_for_instance instance=blog %}
+  ```
