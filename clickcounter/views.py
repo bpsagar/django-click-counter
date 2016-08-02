@@ -30,7 +30,7 @@ def increment_counter(request):
         ClickCounter.objects.filter(identifier=identifier).update(
             counter=(F('counter')) + 1)
         counter = ClickCounter.objects.get(identifier=identifier)
-        request.session[counter.session_key()] = counter.counter
+        request.session[counter.session_key()] = session_counter + 1
 
     return HttpResponse(
         json.dumps({'status': 'OK', 'counter': counter.counter}),
