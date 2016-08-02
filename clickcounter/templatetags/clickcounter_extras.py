@@ -15,7 +15,10 @@ def identifier_for_instance(instance):
 def counter_for_identifier(identifier):
     '''A template tag to get a counter for a identifier'''
     ClickCounter = apps.get_model('clickcounter', 'ClickCounter')
-    return ClickCounter.objects.get(identifier=identifier).counter
+    counter = ClickCounter.objects.filter(identifier=identifier).first()
+    if counter:
+        return counter.counter
+    return 0
 
 
 @register.simple_tag
@@ -30,15 +33,15 @@ def session_counter_for_identifier(context, identifier):
     '''A template tag to get a counter from that session for an identifier'''
     ClickCounter = apps.get_model('clickcounter', 'ClickCounter')
     request = context['request']
-    counter = ClickCounter.objects.get(identifier=identifier)
-    return request.session.get(counter.session_key(), 0)
+    counter = ClickCounter.objects.filter(identifier=identifier).first()
+    if counter:
+        return request.session.get(counter.session_key(), 0)
+    return 0
 
 
 @register.simple_tag(takes_context=True)
 def session_counter_for_instance(context, instance):
     '''A template tag to get a counter from that session for an instance'''
-    ClickCounter = apps.get_model('clickcounter', 'ClickCounter')
-    request = context['request']
     identifier = identifier_for_instance(instance=instance)
-    counter = ClickCounter.objects.get(identifier=identifier)
-    return request.session.get(counter.session_key(), 0)
+    return session_counter_for_identifier(
+        context=context, identifier=identifier)
